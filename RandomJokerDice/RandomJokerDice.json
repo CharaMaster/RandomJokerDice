@@ -1,0 +1,13 @@
+{
+    "id": "RDJ",
+    "name": "Random Joker Dice",
+    "author": ["Chara Master"],
+    "description": "Random dice on the joker",
+    "prefix": "mvan",
+    "main_file": "RandomJokerDice.lua",
+    "badge_colour": "c7638f",
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1225a)"
+    ],
+    "version": "1.0.0"
+}
