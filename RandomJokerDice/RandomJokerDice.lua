@@ -126,7 +126,7 @@ SMODS.Joker {
       bounty_card:set_ability(G.P_CENTERS.m_mvan_bounty, nil, true)
       card:juice_up()
       card_eval_status_text(bounty_card, "extra", nil, nil, nil, {message="Bounty!"}) end
-    if is_end_of_round(context) then
+    if is_end_of_round(context) or context.selling_self then
       for k,v in ipairs(G.playing_cards) do
         if v.config.center == G.P_CENTERS.m_mvan_bounty then v:set_ability(G.P_CENTERS.c_base, nil, true) end
       end
