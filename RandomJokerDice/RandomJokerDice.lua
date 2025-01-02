@@ -16,6 +16,13 @@ SMODS.Atlas {
   py=95
 }
 
+SMODS.Atlas {
+  key = "enhancements",
+  path = "enhancements.png",
+  px = 71,
+  py = 95
+}
+
 local function is_end_of_round(context)
   return context.end_of_round
       and not context.game_over and not
