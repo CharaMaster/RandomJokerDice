@@ -1,6 +1,6 @@
 # RandomJokerDice
-Random Dice on the joker 🫢
+Random Dice on the joker 🫢  
 
 ### Jokers
-Rage Dice
-Bounty Dice
+Rage Dice  
+Bounty Dice  
