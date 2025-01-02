@@ -159,7 +159,7 @@ SMODS.Joker{
       if rank == 3 or rank == 5 or rank == 7 or rank == 9 then
         return {
           mult = rank, -- Use the rank of the card as the multiplier
-          card = context.other_card
+          card = card
         }
       end
     end
