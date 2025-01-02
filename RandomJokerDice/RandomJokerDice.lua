@@ -16,6 +16,14 @@ SMODS.Atlas {
   py=95
 }
 
+local function is_end_of_round(context)
+  return context.end_of_round
+      and not context.game_over and not
+      context.individual and not
+      context.repetition and not
+      context.retrigger_joker
+end
+
 SMODS.Joker {
   key = 'rage dice',
   loc_txt = {
@@ -56,18 +64,65 @@ SMODS.Joker {
       }
     end
 
-    if context.end_of_round
-        and not context.game_over and not
-        context.individual and not
-        context.repetition and not
-        context.retrigger_joker
-        and card.ability.extra.xmult > 1 then
+    if is_end_of_round(context) and card.ability.extra.xmult > 1 then
       card.ability.extra.xmult = 1
       return {
         message = localize('k_reset'),
         colour = G.C.RED,
         card = card
       }
+    end
+  end
+}
+
+SMODS.Enhancement {
+  key = "bounty",
+  atlas = "enhancements",
+  loc_txt = {
+    name = "Bounty Card",
+    text = {
+      "{C:green}Bounty Dice",
+      "has put a {C:attention}bounty",
+      "on this card"
+    }
+  },
+  weight = 0,
+  config = {mult = 4, p_dollars = 6},
+  overrides_base_rank = true
+}
+
+SMODS.Joker {
+  key = "bountydice",
+  loc_txt = {
+    name = "Bounty Dice",
+    text = {
+      "When first hand is played, put a {C:attention}bounty",
+      "on a {C:red}random card{} in hand",
+      "When the card with a {C:attention}bounty{} is played,",
+      "gives {C:red}+#1#{} Mult and {C:blue}+#2#{} Chips"
+    }
+  },
+  config = {extra = {mult = 4, chips = 50}},
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_mvan_bounty
+    return {vars = {
+    card.ability.extra.mult,
+    card.ability.extra.chips
+  }} end,
+  rarity = 1,
+  atlas = "temp",
+  cost = 4,
+  calculate = function(self, card, context)
+    if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
+      math.randomseed(os.time()) --teehee
+      local bounty_card = G.hand.cards[math.random(#G.hand.cards)]
+      bounty_card:set_ability(G.P_CENTERS.m_mvan_bounty, nil, true)
+      card:juice_up()
+      card_eval_status_text(bounty_card, "extra", nil, nil, nil, {message="Bounty!"}) end
+    if is_end_of_round(context) then
+      for k,v in ipairs(G.playing_cards) do
+        if v.config.center == G.P_CENTERS.m_mvan_bounty then v:set_ability(G.P_CENTERS.c_base, nil, true) end
+      end
     end
   end
 }
