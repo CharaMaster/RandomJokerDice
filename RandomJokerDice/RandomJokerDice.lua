@@ -359,3 +359,42 @@ SMODS.Joker {
     end
   end
 }
+
+-- this took 45.6% of my sanity
+SMODS.Joker {
+  key = "stardice",
+  loc_txt = {
+    name = "Star Dice",
+    text = {
+      "Every {C:blue}hand{}, two random",
+      "jokers are {C:attention}retriggered",
+      "{s:0.7,C:inactive}Code by AmazinDooD"
+    }
+  },
+  rarity = 3,
+  atlas = "temp",
+  config = {extra = {jokers = {nil, nil}}},
+  calculate = function(self, card, context)
+    if context.before then
+      repeat
+        card.ability.extra.jokers[1] = G.jokers.cards[math.random(#G.jokers.cards)]
+        card.ability.extra.jokers[2] = G.jokers.cards[math.random(#G.jokers.cards)]
+      until card.ability.extra.jokers[2] ~= card.ability.extra.jokers[1] and
+      card.ability.extra.jokers[1] ~= card and 
+      card.ability.extra.jokers[2] ~= card
+
+      card.ability.extra.jokers[1]:juice_up()
+      card.ability.extra.jokers[2]:juice_up()
+    end
+    if context.retrigger_joker_check and not context.retrigger_joker and
+    (card.ability.extra.jokers[1] == context.other_card or
+    card.ability.extra.jokers[2] == context.other_card) then
+      
+      return {
+        message = localize("k_again_ex"),
+        repetitions = 1,
+        card = card
+      }
+    end
+  end
+}
