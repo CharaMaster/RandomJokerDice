@@ -9,4 +9,5 @@ Slingshot Dice
 Fire Dice  
 Poison Dice  
 Mimic Dice  
-Broken Dice
+Broken Dice  
+Summoning Dice  
