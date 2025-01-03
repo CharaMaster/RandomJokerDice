@@ -5,5 +5,7 @@ Random Dice on the joker 🫢
 Rage Dice  
 Bounty Dice  
 Solar Dice  
-Slingshot Dice
-Fire Dice
+Slingshot Dice  
+Fire Dice  
+Poison Dice  
+Mimic Dice  **(subject to change soon, very broken)**
