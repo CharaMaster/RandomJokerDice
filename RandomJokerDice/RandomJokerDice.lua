@@ -304,3 +304,58 @@ SMODS.Joker {
     end end
   end
 }
+
+SMODS.Joker {
+  key = "summoningdice",
+  loc_txt = {
+    name = "Summoning Dice",
+    text = {
+      "Upon discarding {C:red}#1#{C:inactive} (#2#) {}cards,",
+      "{C:attention}create a card{} with an enhancement and",
+      "{C:green}add it to your hand",
+      "{s:0.7, C:inactive}Code by AmazinDooD"
+    }
+  },
+  rarity = 2,
+  atlas = "temp",
+  cost = 6,
+  config = {extra = {discard_req = 15, discards_left = 15}},
+  loc_vars = function(self, info_queue, card)
+    return {vars = {card.ability.extra.discard_req, card.ability.extra.discards_left}}
+  end,
+  calculate = function(self, card, context)
+    if context.discard then
+      card.ability.extra.discards_left = card.ability.extra.discards_left - 1
+      if card.ability.extra.discards_left ~= 0 then
+        return {
+          delay = 0.2,
+          message = card.ability.extra.discards_left.." Remaining",
+          colour = G.C.RED,
+          card = card
+        }
+      else
+        -- 99% of this is copied from Certificate
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            local enhancement = SMODS.poll_enhancement { type_key = "sujjjjjjjjjjjjjjmmoning_dice", guaranteed = true }:lower()
+            local _card = create_playing_card({
+              front = pseudorandom_element(G.P_CARDS, pseudoseed('summoning')),
+              center = G.P_CENTERS[enhancement]
+            }, G.hand, nil, nil, { G.C.SECONDARY_SET.Enhanced })
+            G.GAME.blind:debuff_card(_card)
+            G.hand:sort()
+            card:juice_up()
+            return true
+          end
+        }))
+      card.ability.extra.discards_left = card.ability.extra.discard_req
+        return {
+          message = "Summoned!",
+          colour = G.C.CHIPS,
+          card = card,
+          playing_cards_created = { true }
+        }
+      end
+    end
+  end
+}
