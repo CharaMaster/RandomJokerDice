@@ -204,57 +204,6 @@ SMODS.Joker{
 
 
 SMODS.Joker{
-  key = "mimicdice",
-  loc_txt = {
-    name = 'Mimic Dice',
-    text = {
-        'Retriggers a {C:attention}random joker{}',
-        '{s:0.9, C:inactive}Cannot retrigger itself{}',
-        "{s:0.7, C:inactive}Code by Valajar"
-    }
-  },
-  rarity = 3,
-  atlas = "temp",
-  cost = 10,
-  unlocked = true,
-  discovered = true,
-  eternal_compat = true,
-  blueprint_compat = false,
-  perishable_compat = true,
-  config = {
-    extra = { retriggers = 1 }
-  },
-  loc_vars = function(self, info_queue, center)
-    if self.ability and self.ability.extra then
-      return { vars = { self.ability.extra.retriggers } }
-    end
-  end,
-  calculate = function(self, card, context)
-    if context.retrigger_joker_check and not context.retrigger_joker and context.other_card ~= self then
-        local jokers = {}
-        for _, other_card in pairs(G.jokers.cards) do
-            if other_card ~= self then
-                table.insert(jokers, other_card)
-            end
-        end
-        if #jokers == 0 then
-            return nil, true
-        end
-        local target = jokers[math.random(#jokers)]
-        if context.other_card == target and context.cardarea == G.Jokers then
-            return {
-                message = localize("k_again_ex"),
-                repetitions = (self.ability and self.ability.extra and self.ability.extra.retriggers) or 1,
-                card = target,
-            }
-        else
-            return nil, true
-        end
-    end
-end
-}
-
-SMODS.Joker{
   key = "poisondice",
   loc_txt = {
     name = 'Poison Dice',
@@ -290,3 +239,36 @@ SMODS.Joker{
   end,
 }
 
+SMODS.Joker{
+  key = "mimic_dice",
+  loc_txt = {
+    name = 'Mimic Dice',
+    text = {
+        '{C:attention}Retriggers{} Wild Cards {C:attention}#1#{} times',
+        "{s:0.7, C:inactive}Code by Valajar{}"
+    }
+  },
+  rarity = 2,
+  atlas = "temp",
+  cost = 6,
+  unlocked = true,
+  discovered = true,
+  eternal_compat = true,
+  blueprint_compat = false,
+  perishable_compat = true,
+  config = { extra = { repetitions = 1 }},
+  loc_vars = function(self, info_queue, card)
+    return { vars = { card.ability.extra.repetitions } }
+  end,
+  calculate = function(self, card, context)
+    if context.cardarea == G.play and context.repetition and not context.repetition_only then
+      if context.other_card.ability.name == 'Wild Card' then
+        return {
+          message = 'Again!',
+          repetitions = card.ability.extra.repetitions,
+          card = context.other_card
+        }
+      end
+    end
+  end
+}
