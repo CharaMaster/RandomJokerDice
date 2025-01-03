@@ -138,7 +138,7 @@ SMODS.Joker {
 
 
 SMODS.Joker{
-  key = "solar_dice",
+  key = "solardice",
   loc_txt = {
     name = 'Solar Dice',
     text = {
@@ -204,7 +204,7 @@ SMODS.Joker{
 
 
 SMODS.Joker{
-  key = "mimic_dice",
+  key = "mimicdice",
   loc_txt = {
     name = 'Mimic Dice',
     text = {
@@ -255,7 +255,7 @@ end
 }
 
 SMODS.Joker{
-  key = "poison_dice",
+  key = "poisondice",
   loc_txt = {
     name = 'Poison Dice',
     text = {
@@ -269,12 +269,12 @@ SMODS.Joker{
   discovered = true,
   cost = 6,
   blueprint_compat = false,
-  config = {extra = 0.98},
+  config = {extra = 0.97},
   loc_vars = function(self, info_queue, card)
       return {vars = {card.ability.extra}}
   end,
   calculate = function(self, card, context)
-      if context.before == true and not context.blueprint then
+      if context.before and not context.blueprint then
           G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()
               G.GAME.blind.chips = math.floor(G.GAME.blind.chips * card.ability.extra)
               G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
