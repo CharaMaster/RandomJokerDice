@@ -178,7 +178,7 @@ SMODS.Joker{
         "{s:0.7, C:inactive}Code by Valajar"
     }
   },
-  rarity = 3,
+  rarity = 2,
   atlas = "temp", 
   cost = 10,
   unlocked = true,
@@ -186,7 +186,7 @@ SMODS.Joker{
   eternal_compat = true,
   blueprint_compat = true,
   perishable_compat = true,
-  config = {extra = {x_mult = 1.5}},
+  config = {extra = {x_mult = 1.25}},
   loc_vars = function(self, info_queue, card)
     return { vars = { self.config.extra.x_mult } }
   end,
@@ -259,7 +259,7 @@ SMODS.Joker{
   loc_txt = {
     name = 'Poison Dice',
     text = {
-        'After every hand, reduce blind size by {C:attention}2%{}',
+        'After every hand, reduce blind size by {C:attention}3%{}',
         "{s:0.7, C:inactive}Code by Valajar"
     }
   },
