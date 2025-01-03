@@ -240,7 +240,7 @@ SMODS.Joker{
 }
 
 SMODS.Joker{
-  key = "mimic_dice",
+  key = "mimicdice",
   loc_txt = {
     name = 'Mimic Dice',
     text = {
@@ -270,5 +270,37 @@ SMODS.Joker{
         }
       end
     end
+  end
+}
+
+SMODS.Joker {
+  key = "brokendice",
+  loc_txt = {
+    name = "Broken Dice",
+    text = {
+      "A {C:attention}random card{} in played hand",
+      "gains {C:blue}+#1#{} chips"
+    }
+  },
+  rarity = 1,
+  atlas = "temp",
+  cost = 4,
+  config = {extra = {chips = 40, bonus_card = nil}},
+  loc_vars = function(self, info_queue, card)
+    return {vars = {card.ability.extra.chips}}
+  end,
+  calculate = function(self, card, context)
+    if context.before then
+      card.ability.extra.bonus_card = math.random(#context.full_hand)
+      card_eval_status_text(context.full_hand[card.ability.extra.bonus_card], "extra", nil, nil, nil, {message="Broken!"})
+    else if context.individual and context.cardarea == G.play then
+      if context.other_card == context.full_hand[card.ability.extra.bonus_card] then
+        return {
+          message = localize{type='variable',key="a_chips",vars={card.ability.extra.chips}},
+          chips = card.ability.extra.chips,
+          card = card,
+        }
+      end
+    end end
   end
 }
