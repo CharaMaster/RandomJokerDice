@@ -8,4 +8,5 @@ Solar Dice
 Slingshot Dice  
 Fire Dice  
 Poison Dice  
-Mimic Dice  **(subject to change soon, very broken)**
+Mimic Dice  
+Broken Dice
