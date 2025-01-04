@@ -11,3 +11,4 @@ Poison Dice
 Mimic Dice  
 Broken Dice  
 Summoning Dice  
+Combo Dice  
