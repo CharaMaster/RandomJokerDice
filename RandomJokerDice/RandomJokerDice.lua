@@ -445,7 +445,7 @@ SMODS.Joker {
   },
   rarity = 3,
   atlas = "temp",
-  config = {extra = {chance = 20, blind_size = 0.8}},
+  config = {extra = {chance = 10, blind_size = 0.7}},
   loc_vars = function (self, info_queue, card)
     return {vars = {
       card.ability.extra.chance,
