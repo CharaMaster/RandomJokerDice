@@ -106,7 +106,17 @@ return {
                     'transform 15 other random cards into it',
                     "{s:0.7,C:inactive}Code by Valajar and Narrik Synthfox"
                 }
-            }
+            },
+            j_rjd_geardice = {
+                name = "Gear Dice",
+                text = {
+                    "{C:white,X:red}X#1#{} Mult",
+                    "If hand type is the same as the last hand played, increases by {C:white,X:red}X#2#",
+                    "Otherwise, descreases by {C:white,X:red}X#2#",
+                    "{C:inactive}(Last hand was a #3#)",
+                    "{s:0.7,C:inactive}Code by AmazinDooD"
+                }
+            },
         },
         Enhanced = {
             m_rjd_bounty = {
