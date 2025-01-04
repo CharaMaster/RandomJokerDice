@@ -83,13 +83,13 @@ SMODS.Enhancement {
 
 SMODS.Joker {
   key = "bountydice",
-  config = { extra = { mult = 4, chips = 50 } },
+  config = { extra = { mult = 4, dollars = 6 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_rjd_bounty
     return {
       vars = {
         card.ability.extra.mult,
-        card.ability.extra.chips
+        card.ability.extra.dollars
       }
     }
   end,
