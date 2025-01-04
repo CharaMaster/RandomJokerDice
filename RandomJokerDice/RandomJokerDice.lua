@@ -432,3 +432,45 @@ SMODS.Joker {
     end
   end
 }
+
+SMODS.Joker {
+  key = "holysworddice",
+  loc_txt = {
+    name = "Holy Sword Dice",
+    text = {
+      "After every hand, {C:green}#3# in #1#{} chance to lower",
+      "blind size by {C:attention}#2#%",
+      "{s:0.7,C:inactive}Code by AmazinDooD and Valajar"
+    }
+  },
+  rarity = 3,
+  atlas = "temp",
+  config = {extra = {chance = 20, blind_size = 0.8}},
+  loc_vars = function (self, info_queue, card)
+    return {vars = {
+      card.ability.extra.chance,
+      100 - card.ability.extra.blind_size * 100,
+      G.GAME.probabilities.normal
+    }}
+  end,
+  calculate = function(self, card, context)
+    if context.before and pseudorandom('holysworddice') < G.GAME.probabilities.normal / card.ability.extra.chance then
+      G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          G.GAME.blind.chips = math.floor(G.GAME.blind.chips * card.ability.extra.blind_size)
+          G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+
+          local chips_UI = G.hand_text_area.blind_chips
+          G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips)
+          G.HUD_blind:recalculate()
+          chips_UI:juice_up()
+
+          if not silent then play_sound('chips2') end
+          return true
+        end
+      }))
+    end
+  end
+}
