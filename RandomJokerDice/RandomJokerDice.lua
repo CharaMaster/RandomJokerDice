@@ -36,7 +36,7 @@ SMODS.Joker {
   loc_txt = {
     name = 'Rage Dice',
     text = {
-      "Evert card give {X:mult,C:white} X#1# {} mult when card scored",
+      "Every card give {X:mult,C:white} X#1# {} mult when card scored",
       "Gain {X:mult,C:white} X#2# {} mult per card scored",
       "Resets at end of the round",
       "{s:0.7,C:inactive}Code by CharaMaster"
@@ -512,7 +512,7 @@ SMODS.Joker{
           local j = math.random(1, i)
           valid_cards[i], valid_cards[j] = valid_cards[j], valid_cards[i]
         end
-        local maxCards=#G.playing_cards>15 and 15 or #G.playing_cards-1
+        local maxCards=#G.playing_cards>5 and 5 or #G.playing_cards-1
         for i = 1, maxCards do
           copy_card(selected_card,G.playing_cards[valid_cards[i]])
         end
