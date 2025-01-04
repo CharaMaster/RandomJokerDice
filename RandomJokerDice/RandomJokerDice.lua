@@ -456,3 +456,35 @@ SMODS.Joker {
     end
   end
 }
+
+SMODS.Joker {
+  key = "geardice",
+  rarity = 3,
+  atlas = "temp",
+  cost = 8,
+  config = {extra = {xmult = 1, xmult_mod = 0.25, hand_type = "High Card"}},
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, card)
+    return {vars = {card.ability.extra.xmult, card.ability.extra.xmult_mod, card.ability.extra.hand_type}}
+  end,
+  calculate = function(self, card, context)
+    if context.before and not context.blueprint then
+      if context.scoring_name == card.ability.extra.hand_type then
+        card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
+        card_eval_status_text(card, "extra",nil,nil,nil,
+        { message = localize{type = "variable", key = "a_xmult", vars = {card.ability.extra.xmult}}})
+      else
+        if card.ability.extra.xmult ~= 1 then card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_mod end
+        card_eval_status_text(card, "extra", nil, nil, nil,
+        { message = localize{type = "variable", key = "a_xmult", vars = {card.ability.extra.xmult}}})
+      end
+      card.ability.extra.hand_type = context.scoring_name
+    elseif context.joker_main then
+      return {
+        message = localize { type = "variable", key = "a_xmult", vars = { card.ability.extra.xmult }},
+        Xmult_mod = card.ability.extra.xmult,
+        card = context.blueprint_card or card
+      }
+    end
+  end
+}
