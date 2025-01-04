@@ -474,3 +474,49 @@ SMODS.Joker {
     end
   end
 }
+
+-- genuinely thank Narrik Synthfox. I had no idea where to begin, and the mfer wrote a lot of the code
+SMODS.Joker{
+  key = "mutationdice",
+  loc_txt = {
+    name = 'Mutation Dice',
+    text = {
+        'Select {C:attention}one{} card',
+        'transform 15 other random cards into it',
+        "{s:0.7, C:inactive}Code by Valajar and Narrik Synthfox"
+    }
+  },
+  rarity = 3,
+  atlas = "temp",
+  cost = 10,
+  unlocked = true,
+  discovered = true,
+  eternal_compat = false,
+  blueprint_compat = false,
+  perishable_compat = true,
+  config = {extra = {}},
+  loc_vars = function(self, info_queue, card)
+    return { vars = {} }
+  end,
+  calculate = function(self, card, context)
+    if context.selling_self and not context.blueprint and #G.hand.highlighted == 1 then
+      local valid_cards={}
+      local selected_card = G.hand.highlighted[1]
+      if #G.playing_cards>1 then
+        for i=1,#G.playing_cards do
+          if G.playing_cards[i]~=selected_card then
+            table.insert(valid_cards,i)
+          end
+        end
+        for i = #valid_cards, 2, -1 do
+          local j = math.random(1, i)
+          valid_cards[i], valid_cards[j] = valid_cards[j], valid_cards[i]
+        end
+        local maxCards=#G.playing_cards>15 and 15 or #G.playing_cards-1
+        for i = 1, maxCards do
+          copy_card(selected_card,G.playing_cards[valid_cards[i]])
+        end
+      end
+    end
+  end
+}
