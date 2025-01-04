@@ -16,7 +16,7 @@ return {
                     "When first hand is played, put a {C:attention}bounty",
                     "on a {C:red}random card{} in hand",
                     "When the card with a {C:attention}bounty{} is played,",
-                    "gives {C:red}+#1#{} Mult and {C:blue}+#2#{} Chips",
+                    "gives {C:red}+#1#{} Mult and {C:money}$#2#",
                     "{s:0.7,C:inactive}Code by AmazinDooD"
                 }
             },
