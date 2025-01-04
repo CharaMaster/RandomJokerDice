@@ -23,22 +23,6 @@ SMODS.Atlas {
   py = 95
 }
 
-SMODS.Atlas {
-  key = "blinds",
-  path = "BlindChips.png",
-  px = 34,
-  py = 34,
-  asset_table = "ANIMATION_ATLAS",
-  frames = 21
-}
-
-SMODS.Keybind {
-  key_pressed = "j",
-  event = "held",
-  held_duration = 2,
-  action = function(_) SMODS.restart_game() end
-}
-
 local function is_end_of_round(context)
   return context.end_of_round
       and not context.game_over and not
