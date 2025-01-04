@@ -421,10 +421,15 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.other_joker then
       if context.other_joker.config.center_key:sub(1,#card.ability.extra.prefix) == card.ability.extra.prefix then
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            context.other_joker:juice_up(0.5, 0.5)
+            return true
+          end
+        }))
         return {
           message = localize{type="variable",key="a_mult",vars={card.ability.extra.mult}},
-          mult = card.ability.extra.mult,
-          card = card,
+          mult_mod = card.ability.extra.mult,
         }
       end
     end
