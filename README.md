@@ -14,3 +14,4 @@ Summoning Dice
 Combo Dice  
 Holy Sword Dice  
 Mutation Dice
+Wind Dice  
