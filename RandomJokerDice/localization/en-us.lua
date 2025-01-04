@@ -104,7 +104,7 @@ return {
                 text = {
                     'Select {C:attention}one{} card and sell this joker',
                     'transform 15 other random cards into it',
-                    "{s:0.7, C:inactive}Code by Valajar and Narrik Synthfox"
+                    "{s:0.7,C:inactive}Code by Valajar and Narrik Synthfox"
                 }
             }
         },
