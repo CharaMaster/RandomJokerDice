@@ -4,10 +4,10 @@ return {
             j_rjd_ragedice = {
                 name = 'Rage Dice',
                 text = {
-                    "Evert card give {X:mult,C:white} X#1# {} mult when card scored",
-                    "Gain {X:mult,C:white} X#2# {} mult per card scored",
-                    "Resets at end of the round",
-                    "{s:0.7,C:inactive}Code by CharaMaster"
+                   "each card give {X:mult,C:white} x #1# {} mult when card scored",
+                   "{C:green} #3# in #4# {} chance to gain {X:mult,C:white} x #2# {}",
+                   "and {C:red}decrease{} chance by {X:green,C:white} #5# {}",
+                   "Reset at the end of round",
                 }
             },
             j_rjd_bountydice = {
