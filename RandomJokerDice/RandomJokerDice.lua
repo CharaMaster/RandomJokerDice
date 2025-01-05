@@ -33,14 +33,14 @@ end
 
 SMODS.Joker {
   key = 'ragedice',
-  config = { extra = { xmult = 1, xmult_gain = 0.2 } },
+  config = { extra = { xmult = 1, xmult_gain = 0.2, odds = 2, odds_gain = 0.2 } },
   rarity = 3,
   atlas = 'RandomJokerDice',
   pos = { x = 0, y = 0 },
   soul_pos = { x = 1, y = 0 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
+    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.odds_gain } }
   end,
 
   calculate = function(self, card, context)
@@ -52,9 +52,21 @@ SMODS.Joker {
       }
     end
 
+      calculate = function(self, card, context)
+    if context.joker_main then
+      return {
+        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
+        Xmult_mod = card.ability.extra.xmult,
+        card = card
+      }
+    end
+
     if context.individual and context.cardarea == G.play then
-      card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
-      card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+      if pseudorandom('ragedice') < G.GAME.probabilities.normal / card.ability.extra.odds then
+        card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
+        card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+        card.ability.extra.odds = card.ability.extra.odds + card.ability.extra.odds_gain
+      end
       return {
         message = localize { type = "variable", key = "a_xmult", vars = { card.ability.extra.xmult } },
         x_mult = card.ability.extra.xmult,
@@ -62,8 +74,14 @@ SMODS.Joker {
       }
     end
 
-    if is_end_of_round(context) and card.ability.extra.xmult > 1 then
+    if context.end_of_round
+        and not context.game_over and not
+        context.individual and not
+        context.repetition and not
+        context.retrigger_joker
+        and card.ability.extra.xmult > 0.1 then
       card.ability.extra.xmult = 1
+      card.ability.extra.odds = 2
       return {
         message = localize('k_reset'),
         colour = G.C.RED,
