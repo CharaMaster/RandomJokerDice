@@ -52,15 +52,6 @@ SMODS.Joker {
       }
     end
 
-      calculate = function(self, card, context)
-    if context.joker_main then
-      return {
-        message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
-        Xmult_mod = card.ability.extra.xmult,
-        card = card
-      }
-    end
-
     if context.individual and context.cardarea == G.play then
       if pseudorandom('ragedice') < G.GAME.probabilities.normal / card.ability.extra.odds then
         card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
