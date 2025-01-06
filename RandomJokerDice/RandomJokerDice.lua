@@ -33,7 +33,7 @@ end
 
 SMODS.Joker {
   key = 'ragedice',
-  config = { extra = { xmult = 1, xmult_gain = 0.1, odds = 2 } },
+  config = { extra = { xmult = 1, xmult_gain = 0.2, odds = 2 } },
   rarity = 3,
   atlas = 'RandomJokerDice',
   pos = { x = 0, y = 0 },
