@@ -40,7 +40,7 @@ SMODS.Joker {
   soul_pos = { x = 1, y = 0 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, (G.GAME.probabilities.normal or 1), card.ability.extra.odds, card.ability.extra.odds_gain } }
+    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
   end,
 
   calculate = function(self, card, context)
