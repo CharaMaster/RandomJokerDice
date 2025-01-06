@@ -23,6 +23,15 @@ SMODS.Atlas {
   py = 95
 }
 
+SMODS.Atlas {
+  key = "blinds",
+  path = "BlindChips.png",
+  px = 34,
+  py = 34,
+  asset_table = "ANIMATION_ATLAS",
+  frames = 21
+}
+
 local function is_end_of_round(context)
   return context.end_of_round
       and not context.game_over and not
@@ -33,14 +42,14 @@ end
 
 SMODS.Joker {
   key = 'ragedice',
-  config = { extra = { xmult = 1, xmult_gain = 0.2, odds = 2 } },
+  config = { extra = { xmult = 1, xmult_gain = 0.2 } },
   rarity = 3,
   atlas = 'RandomJokerDice',
-  pos = { x = 0, y = 0 },
-  soul_pos = { x = 1, y = 0 },
+  pos = { x = 7, y = 0 },
+  soul_pos = { x = 7, y = 1 },
   cost = 6,
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain, (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
+    return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
   end,
 
   calculate = function(self, card, context)
@@ -53,10 +62,8 @@ SMODS.Joker {
     end
 
     if context.individual and context.cardarea == G.play then
-      if pseudorandom('ragedice') < G.GAME.probabilities.normal / card.ability.extra.odds then
-        card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
-        card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
-      end
+      card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
+      card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
       return {
         message = localize { type = "variable", key = "a_xmult", vars = { card.ability.extra.xmult } },
         x_mult = card.ability.extra.xmult,
@@ -64,14 +71,8 @@ SMODS.Joker {
       }
     end
 
-    if context.end_of_round
-        and not context.game_over and not
-        context.individual and not
-        context.repetition and not
-        context.retrigger_joker
-        and card.ability.extra.xmult > 0.1 then
+    if is_end_of_round(context) and card.ability.extra.xmult > 1 then
       card.ability.extra.xmult = 1
-      card.ability.extra.odds = 2
       return {
         message = localize('k_reset'),
         colour = G.C.RED,
@@ -94,7 +95,12 @@ SMODS.Joker {
   config = { extra = { mult = 4, chips = 50, bounty_enhancement = G.P_CENTERS.c_base } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_rjd_bounty
-    return {vars = {card.ability.extra.mult, card.ability.extra.chips}}
+    return {
+      vars = {
+        card.ability.extra.mult,
+        card.ability.extra.chips
+      }
+    }
   end,
   rarity = 1,
   atlas = "temp",
@@ -143,7 +149,9 @@ SMODS.Joker {
 SMODS.Joker {
   key = "slingshotdice",
   rarity = 2,
-  atlas = "temp",
+  atlas = 'RandomJokerDice',
+  pos = {x=1,y=0},
+  soul_pos = {x=1,y=1},
   cost = 10,
   unlocked = true,
   discovered = true,
@@ -170,7 +178,9 @@ SMODS.Joker {
 SMODS.Joker {
   key = "poisondice",
   rarity = 1,
-  atlas = "temp",
+  atlas = "RandomJokerDice",
+  pos = {x=5,y=0},
+  soul_pos = {x=5,y=1},
   unlocked = true,
   discovered = true,
   cost = 6,
@@ -204,7 +214,9 @@ SMODS.Joker {
 SMODS.Joker {
   key = "mimicdice",
   rarity = 2,
-  atlas = "temp",
+  atlas = "RandomJokerDice",
+  pos = {x=3,y=0},
+  soul_pos = {x=3,y=1},
   cost = 6,
   unlocked = true,
   discovered = true,
@@ -219,7 +231,7 @@ SMODS.Joker {
     if context.cardarea == G.play and context.repetition and not context.repetition_only then
       if context.other_card.ability.name == 'Wild Card' then
         return {
-          message = 'Again!',
+          message = localize("k_again_ex"),
           repetitions = card.ability.extra.repetitions,
           card = context.other_card
         }
@@ -307,6 +319,7 @@ SMODS.Joker {
   key = "stardice",
   rarity = 3,
   atlas = "temp",
+  cost = 9,
   config = {extra = {jokers = {nil, nil}}},
   calculate = function(self, card, context)
     if context.before then
@@ -338,6 +351,7 @@ SMODS.Joker {
   key = "combodice",
   rarity = 3,
   atlas = "temp",
+  cost = 7,
   blueprint_compat = true,
   config = {extra = {hand = "High Card", times_played = 0}},
   loc_vars = function(self, info_queue, card)
@@ -364,6 +378,7 @@ SMODS.Joker {
   key = "holysworddice",
   rarity = 3,
   atlas = "temp",
+  cost = 8,
   config = {extra = {chance = 20, blind_size = 0.8}},
   loc_vars = function (self, info_queue, card)
     return {vars = {
@@ -398,6 +413,7 @@ SMODS.Joker {
   key = "winddice",
   rarity = 1,
   atlas = "temp",
+  cost = 4,
   config = {extra = {mult = 7, prefix = "j_rjd_"}},
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue+1] = {
@@ -462,6 +478,30 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+  key = "growthdice",
+  rarity = 2,
+  atlas = "temp",
+  cost = 4,
+  calculate = function(self, card, context)
+    if context.after then
+      G.E_MANAGER:add_event(Event{
+        trigger = 'after',
+        delay = 0.1,
+        func = function()
+          local _card = context.scoring_hand[#context.scoring_hand]
+          local rank_data = SMODS.Ranks[_card.base.value]
+          local new_rank = rank_data.next[1]
+          assert(SMODS.change_base(_card, nil, new_rank))
+          _card:juice_up(0.6,0.6)
+          return true
+        end
+      })
+      card_eval_status_text(card, "extra", nil, nil, nil, { message = "Growth!" })
+    end
+  end
+}
+
+SMODS.Joker {
   key = "geardice",
   rarity = 3,
   atlas = "temp",
@@ -489,6 +529,74 @@ SMODS.Joker {
         Xmult_mod = card.ability.extra.xmult,
         card = context.blueprint_card or card
       }
+    end
+  end
+}
+
+-- This enhancement is purely cosmetic :devil:
+SMODS.Enhancement {
+  key = "atomic",
+  atlas = "enhancements",
+  pos = {x=1,y=0},
+  weight = 0,
+  overrides_base_rank = true,
+}
+
+SMODS.Joker {
+  key = "atomicdice",
+  rarity = 1,
+  atlas = "RandomJokerDice",
+  pos = {x=4,y=0},
+  soul_pos = {x=4,y=1},
+  cost = 3,
+  config = {extra = {mult = 4, mult_gain = 4}},
+  loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = G.P_CENTERS.m_rjd_atomic
+    return {vars = {card.ability.extra.mult, card.ability.extra.mult_gain}}
+  end,
+  calculate = function (self, card, context)
+    if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
+      math.randomseed(os.time())
+      local atomic_card = G.hand.cards[math.random(#G.hand.cards)]
+      atomic_card:set_ability(G.P_CENTERS.m_rjd_atomic, nil, true)
+      card:juice_up()
+      card_eval_status_text(atomic_card, "extra", nil, nil, nil, { message = "Atomic!" })
+    elseif context.individual and context.cardarea == G.play then 
+      if context.other_card.config.center == G.P_CENTERS.m_rjd_atomic then
+        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+        card_eval_status_text(card, "extra", nil, nil, nil,
+          { message = localize { type = "variable", key = "a_mult", vars = { card.ability.extra.mult } } })
+      end
+    elseif context.joker_main then
+      return {
+        message = localize{type="variable",key="a_mult",vars={card.ability.extra.mult}},
+        mult_mod = card.ability.extra.mult,
+        card = card
+      }
+    end
+  end
+}
+
+SMODS.Joker {
+  key = "firedice",
+  rarity = 2,
+  atlas = "RandomJokerDice",
+  pos={x=0,y=0},
+  soul_pos={x=0,y=1},
+  cost = 5,
+  config = {extra = {mult=3}},
+  loc_vars = function(self, info_queue, card)
+    return {vars = {card.ability.extra.mult}}
+  end,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.hand then
+      if context.other_card:is_suit("Diamonds") or context.other_card:is_suit("Hearts") then
+        return {
+          message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } },
+          h_mult = card.ability.extra.mult,
+          card = context.other_card
+        }
+      end
     end
   end
 }
