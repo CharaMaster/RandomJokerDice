@@ -33,7 +33,7 @@ end
 
 SMODS.Joker {
   key = 'ragedice',
-  config = { extra = { xmult = 1, xmult_gain = 0.2, odds = 2, odds_gain = 0.2 } },
+  config = { extra = { xmult = 1, xmult_gain = 0.1, odds = 2 } },
   rarity = 3,
   atlas = 'RandomJokerDice',
   pos = { x = 0, y = 0 },
@@ -56,7 +56,6 @@ SMODS.Joker {
       if pseudorandom('ragedice') < G.GAME.probabilities.normal / card.ability.extra.odds then
         card_eval_status_text(card, 'extra', nil, nil, nil, { message = "RAGE" })
         card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
-        card.ability.extra.odds = card.ability.extra.odds + card.ability.extra.odds_gain
       end
       return {
         message = localize { type = "variable", key = "a_xmult", vars = { card.ability.extra.xmult } },
