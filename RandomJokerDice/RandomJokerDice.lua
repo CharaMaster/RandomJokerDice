@@ -91,15 +91,10 @@ SMODS.Enhancement {
 
 SMODS.Joker {
   key = "bountydice",
-  config = { extra = { mult = 4, dollars = 6 } },
+  config = { extra = { mult = 4, chips = 50, bounty_enhancement = G.P_CENTERS.c_base } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_rjd_bounty
-    return {
-      vars = {
-        card.ability.extra.mult,
-        card.ability.extra.dollars
-      }
-    }
+    return {vars = {card.ability.extra.mult, card.ability.extra.chips}}
   end,
   rarity = 1,
   atlas = "temp",
@@ -108,13 +103,14 @@ SMODS.Joker {
     if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
       math.randomseed(os.time()) --teehee
       local bounty_card = G.hand.cards[math.random(#G.hand.cards)]
+      card.ability.extra.bounty_enhancement = bounty_card.config.center
       bounty_card:set_ability(G.P_CENTERS.m_rjd_bounty, nil, true)
       card:juice_up()
       card_eval_status_text(bounty_card, "extra", nil, nil, nil, { message = "Bounty!" })
     end
     if is_end_of_round(context) or context.selling_self then
       for k, v in ipairs(G.playing_cards) do
-        if v.config.center == G.P_CENTERS.m_rjd_bounty then v:set_ability(G.P_CENTERS.c_base, nil, true) end
+        if v.config.center == G.P_CENTERS.m_rjd_bounty then v:set_ability(card.ability.extra.bounty_enhancement, nil, true) end
       end
     end
   end
