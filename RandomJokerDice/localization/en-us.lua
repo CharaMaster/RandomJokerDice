@@ -4,9 +4,8 @@ return {
             j_rjd_ragedice = {
                 name = 'Rage Dice',
                 text = {
-                   "each card give {X:mult,C:white} x #1# {} mult when card scored",
+                   "Each card give {X:mult,C:white} x #1# {} mult when card scored",
                    "{C:green} #3# in #4# {} chance to gain {X:mult,C:white} x #2# {}",
-                   "and {C:red}decrease{} chance by {X:green,C:white} #5# {}",
                    "Reset at the end of round",
                 }
             },
