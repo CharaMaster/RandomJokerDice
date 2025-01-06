@@ -589,12 +589,11 @@ SMODS.Joker {
     return {vars = {card.ability.extra.mult}}
   end,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.hand then
+    if context.individual and context.cardarea == G.hand and not is_end_of_round(context) then
       if context.other_card:is_suit("Diamonds") or context.other_card:is_suit("Hearts") then
         return {
-          message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } },
           h_mult = card.ability.extra.mult,
-          card = context.other_card
+          card = card
         }
       end
     end
