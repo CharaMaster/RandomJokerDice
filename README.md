@@ -13,5 +13,5 @@ Broken Dice
 Summoning Dice  
 Combo Dice  
 Holy Sword Dice  
-Mutation Dice
+Mutation Dice  
 Wind Dice  
