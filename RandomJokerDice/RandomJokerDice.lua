@@ -32,6 +32,33 @@ SMODS.Atlas {
   frames = 21
 }
 
+-- Required for High Roller's Deck
+local dice = {
+  { -- Common Dice
+    "bountydice",
+    "poisondice",
+    "brokendice",
+    "winddice",
+  },
+  { -- Uncommon Dice
+    "solardice",
+    "slingshotdice",
+    "mimicdice",
+    "summoningdice",
+    "growthdice",
+    "firedice",
+    "atomicdice",
+  },
+  { -- Rare Dice
+    "ragedice",
+    "stardice",
+    "combodice",
+    "holysworddice",
+    "mutationdice",
+    "geardice",
+  },
+}
+
 local function is_end_of_round(context)
   return context.end_of_round
       and not context.game_over and not
@@ -39,6 +66,31 @@ local function is_end_of_round(context)
       context.repetition and not
       context.retrigger_joker
 end
+
+-- Custom deck
+local deck = SMODS.Back {
+  key = "highrollersdeck",
+  atlas = "temp",
+  apply = function(self)
+    local joker1, joker2
+    repeat
+      local rarity1 = SMODS.poll_rarity("Joker", "highrollersdeck")
+      local rarity2 = SMODS.poll_rarity("Joker", "highrollersdeck")
+      joker1 = dice[rarity1][math.random(#dice[rarity1])]
+      joker2 = dice[rarity2][math.random(#dice[rarity2])]
+    until joker1 ~= joker2
+    G.E_MANAGER:add_event(Event{
+      delay = 0.1,
+      trigger = "after",
+      func = function()
+        SMODS.add_card{set="Joker",key="j_rjd_"..joker1}
+        SMODS.add_card{set="Joker",key="j_rjd_"..joker2}
+        play_sound('tarot1')
+        return true
+      end
+    })
+  end
+}
 
 SMODS.Joker {
   key = 'ragedice',
@@ -103,7 +155,9 @@ SMODS.Joker {
     }
   end,
   rarity = 1,
-  atlas = "temp",
+  atlas = "RandomJokerDice",
+  pos = {x=9,y=0},
+  soul_pos = {x=9,y=1},
   cost = 4,
   calculate = function(self, card, context)
     if context.before and context.cardarea == G.jokers and G.GAME.current_round.hands_played == 0 then
@@ -243,7 +297,9 @@ SMODS.Joker {
 SMODS.Joker {
   key = "brokendice",
   rarity = 1,
-  atlas = "temp",
+  atlas = "RandomJokerDice",
+  pos = {x=0,y=2},
+  soul_pos = {x=0,y=3},
   cost = 4,
   config = { extra = { chips = 40, bonus_card = nil } },
   loc_vars = function(self, info_queue, card)
@@ -291,7 +347,7 @@ SMODS.Joker {
         -- 99% of this is copied from Certificate
         G.E_MANAGER:add_event(Event({
           func = function()
-            local enhancement = SMODS.poll_enhancement { type_key = "sujjjjjjjjjjjjjjmmoning_dice", guaranteed = true }
+            local enhancement = SMODS.poll_enhancement { type_key = "summoning_dice", guaranteed = true }
             :lower()
             local _card = create_playing_card({
               front = pseudorandom_element(G.P_CARDS, pseudoseed('summoning')),
@@ -412,7 +468,9 @@ SMODS.Joker {
 SMODS.Joker {
   key = "winddice",
   rarity = 1,
-  atlas = "temp",
+  atlas = "RandomJokerDice",
+  pos = {x=8,y=0},
+  soul_pos = {x=8,y=1},
   cost = 4,
   config = {extra = {mult = 7, prefix = "j_rjd_"}},
   loc_vars = function(self, info_queue, card)
@@ -544,7 +602,7 @@ SMODS.Enhancement {
 
 SMODS.Joker {
   key = "atomicdice",
-  rarity = 1,
+  rarity = 2,
   atlas = "RandomJokerDice",
   pos = {x=4,y=0},
   soul_pos = {x=4,y=1},
